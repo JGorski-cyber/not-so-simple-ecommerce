@@ -17,6 +17,9 @@ services:
     volumes:
       - ${CERTIFICATES_HOST_PATH}:${CERTIFICATES_CONTAINER_PATH}
       - ${AWS_CREDENTIALS_HOST_PATH}:${AWS_CREDENTIALS_CONTAINER_PATH}
+    depends_on:
+      nsse.terraform-apply.internal:
+        condition: service_completed_successfully
     networks:
       - nsse-network
 
@@ -33,5 +36,8 @@ services:
     volumes:
       - ${CERTIFICATES_HOST_PATH}:${CERTIFICATES_CONTAINER_PATH}
       - ${AWS_CREDENTIALS_HOST_PATH}:${AWS_CREDENTIALS_CONTAINER_PATH}
+    depends_on:
+      nsse.terraform-apply.internal:
+        condition: service_completed_successfully
     networks:
       - nsse-network

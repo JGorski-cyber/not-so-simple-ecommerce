@@ -8,7 +8,8 @@ services:
   nsse.terraform-init.internal:
     container_name: nsse.terraform-init.internal
     depends_on:
-      - nsse.localstack.internal
+      nsse.localstack.internal:
+        condition: service_healthy
     image: hashicorp/terraform:light
     command: ["init"]
     working_dir: ${TERRAFORM_CONTAINER_PATH}
@@ -35,6 +36,12 @@ services:
     ports:
       - 4566:4566
       - 4510-4559:4510-4559
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
     networks:
       - nsse-network
 
